@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Speed — Bio</title>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0a0a0f;
+      --surface: #111118;
+      --border: #1e1e2e;
+      --accent: #6c63ff;
+      --accent2: #a78bfa;
+      --text: #e8e8f0;
+      --muted: #6b6b8a;
+      --green: #22d3a5;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Space Grotesk', sans-serif;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* ── GRID BACKGROUND ── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(108,99,255,0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(108,99,255,0.04) 1px, transparent 1px);
+      background-size: 48px 48px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* ── GLOW ── */
+    .glow {
+      position: fixed;
+      top: -200px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 700px;
+      height: 700px;
+      background: radial-gradient(circle, rgba(108,99,255,0.12) 0%, transparent 70%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* ── WRAPPER ── */
+    .wrapper {
+      position: relative;
+      z-index: 1;
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 80px 24px 120px;
+    }
+
+    /* ── HERO ── */
+    .hero {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 16px;
+      margin-bottom: 64px;
+    }
+
+    .flag-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      padding: 6px 14px;
+      font-family: 'Space Mono', monospace;
+      font-size: 11px;
+      color: var(--muted);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .hero-name {
+      font-size: clamp(52px, 10vw, 88px);
+      font-weight: 700;
+      line-height: 1;
+      letter-spacing: -0.03em;
+      background: linear-gradient(135deg, #ffffff 0%, var(--accent2) 60%, var(--accent) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero-tag {
+      font-family: 'Space Mono', monospace;
+      font-size: 13px;
+      color: var(--green);
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    .hero-tag::before { content: '// '; opacity: 0.5; }
+
+    /* ── DIVIDER ── */
+    .divider {
+      width: 100%;
+      height: 1px;
+      background: linear-gradient(90deg, var(--accent) 0%, transparent 100%);
+      margin-bottom: 48px;
+      opacity: 0.3;
+    }
+
+    /* ── SECTION ── */
+    .section { margin-bottom: 48px; }
+
+    .section-label {
+      font-family: 'Space Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .section-label::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+
+    /* ── IDENTITY BLOCK ── */
+    .identity-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .id-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px;
+      transition: border-color 0.2s;
+    }
+
+    .id-card:hover { border-color: var(--accent); }
+
+    .id-card-label {
+      font-family: 'Space Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 8px;
+    }
+
+    .id-card-value {
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    .id-card-value .emoji { font-size: 18px; margin-right: 6px; }
+
+    /* ── HANDLES ── */
+    .handles-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .handle-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 14px 20px;
+      transition: border-color 0.2s, background 0.2s;
+      cursor: default;
+    }
+
+    .handle-row:hover {
+      border-color: var(--accent);
+      background: #13131f;
+    }
+
+    .handle-platform {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .platform-icon {
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 15px;
+      flex-shrink: 0;
+    }
+
+    .platform-name {
+      font-family: 'Space Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .handle-value {
+      font-size: 14px;
+      font-weight: 600;
+      font-family: 'Space Mono', monospace;
+      color: var(--accent2);
+    }
+
+    /* ── TIMEZONE ── */
+    .tz-block {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .tz-left { display: flex; flex-direction: column; gap: 6px; }
+
+    .tz-clock {
+      font-family: 'Space Mono', monospace;
+      font-size: 36px;
+      font-weight: 700;
+      color: var(--text);
+      letter-spacing: -0.02em;
+      line-height: 1;
+    }
+
+    .tz-info {
+      font-family: 'Space Mono', monospace;
+      font-size: 11px;
+      color: var(--muted);
+      letter-spacing: 0.1em;
+    }
+
+    .tz-badge {
+      background: rgba(108,99,255,0.12);
+      border: 1px solid rgba(108,99,255,0.3);
+      border-radius: 8px;
+      padding: 10px 16px;
+      text-align: center;
+    }
+
+    .tz-badge-main {
+      font-family: 'Space Mono', monospace;
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--accent2);
+    }
+
+    .tz-badge-sub {
+      font-size: 10px;
+      color: var(--muted);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-top: 2px;
+    }
+
+    /* ── MARKETS ACTIVE ── */
+    .market-strip {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .market-pill {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      padding: 8px 16px;
+      font-size: 13px;
+      font-weight: 500;
+    }
+
+    .dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+    }
+
+    .dot-green { background: var(--green); box-shadow: 0 0 6px var(--green); }
+    .dot-yellow { background: #f59e0b; box-shadow: 0 0 6px #f59e0b; }
+
+    /* ── FOOTER ── */
+    .footer {
+      margin-top: 80px;
+      padding-top: 24px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: gap;
+    }
+
+    .footer-name {
+      font-family: 'Space Mono', monospace;
+      font-size: 11px;
+      color: var(--muted);
+      letter-spacing: 0.1em;
+    }
+
+    .footer-dot {
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: var(--accent);
+      opacity: 0.5;
+    }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .hero        { animation: fadeUp 0.6s ease both; }
+    .section:nth-child(1) { animation: fadeUp 0.6s 0.1s ease both; }
+    .section:nth-child(2) { animation: fadeUp 0.6s 0.2s ease both; }
+    .section:nth-child(3) { animation: fadeUp 0.6s 0.3s ease both; }
+    .section:nth-child(4) { animation: fadeUp 0.6s 0.4s ease both; }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 520px) {
+      .identity-grid { grid-template-columns: 1fr; }
+      .tz-block { flex-direction: column; align-items: flex-start; }
+      .handle-row { flex-direction: column; align-items: flex-start; gap: 8px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="glow"></div>
+  <div class="wrapper">
+
+    <!-- HERO -->
+    <div class="hero">
+      <div class="flag-chip">🇱🇻 Latvia &nbsp;·&nbsp; GMT +3</div>
+      <h1 class="hero-name">Speed</h1>
+      <p class="hero-tag">Finance Enthusiast &amp; Investor</p>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- IDENTITY -->
+    <div class="section">
+      <div class="section-label">Identity</div>
+      <div class="identity-grid">
+        <div class="id-card">
+          <div class="id-card-label">Primary Name</div>
+          <div class="id-card-value">Speed</div>
+        </div>
+        <div class="id-card">
+          <div class="id-card-label">Handle</div>
+          <div class="id-card-value">Speed4040</div>
+        </div>
+        <div class="id-card">
+          <div class="id-card-label">Origin</div>
+          <div class="id-card-value"><span class="emoji">🇱🇻</span>Latvia</div>
+        </div>
+        <div class="id-card">
+          <div class="id-card-label">Focus</div>
+          <div class="id-card-value">Finance &amp; Markets</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- HANDLES -->
+    <div class="section">
+      <div class="section-label">Usernames</div>
+      <div class="handles-list">
+
+        <div class="handle-row">
+          <div class="handle-platform">
+            <div class="platform-icon" style="background:rgba(29,161,242,0.12);">𝕏</div>
+            <div class="platform-name">Twitter / X</div>
+          </div>
+          <div class="handle-value">@Speed4040</div>
+        </div>
+
+        <div class="handle-row">
+          <div class="handle-platform">
+            <div class="platform-icon" style="background:rgba(88,101,242,0.12);">💬</div>
+            <div class="platform-name">Discord</div>
+          </div>
+          <div class="handle-value">Speed4040</div>
+        </div>
+
+        <div class="handle-row">
+          <div class="handle-platform">
+            <div class="platform-icon" style="background:rgba(34,211,165,0.12);">🎵</div>
+            <div class="platform-name">Spotify / Music</div>
+          </div>
+          <div class="handle-value">somebodyweusedtoknow</div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- TIMEZONE -->
+    <div class="section">
+      <div class="section-label">Timezone</div>
+      <div class="tz-block">
+        <div class="tz-left">
+          <div class="tz-clock" id="liveClock">--:--:--</div>
+          <div class="tz-info">Riga, Latvia &nbsp;·&nbsp; Eastern European Summer Time</div>
+        </div>
+        <div class="tz-badge">
+          <div class="tz-badge-main">GMT+3</div>
+          <div class="tz-badge-sub">EEST</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MARKETS -->
+    <div class="section">
+      <div class="section-label">Active Markets</div>
+      <div class="market-strip">
+        <div class="market-pill"><span class="dot dot-green"></span>Crypto — 24/7</div>
+        <div class="market-pill"><span class="dot dot-yellow"></span>NYSE — 16:30–23:00 local</div>
+        <div class="market-pill"><span class="dot dot-yellow"></span>NASDAQ — 16:30–23:00 local</div>
+      </div>
+    </div>
+
+    <!-- FOOTER -->
+    <div class="footer">
+      <span class="footer-name">Speed4040 &nbsp;·&nbsp; Latvia 🇱🇻</span>
+      <div class="footer-dot"></div>
+      <span class="footer-name" id="footerDate"></span>
+    </div>
+
+  </div>
+
+  <script>
+    // Live clock in GMT+3
+    function updateClock() {
+      const now = new Date();
+      const offset = 3 * 60; // GMT+3 in minutes
+      const utc = now.getTime() + now.getTimezoneOffset() * 60000;
+      const riga = new Date(utc + offset * 60000);
+
+      const h = String(riga.getHours()).padStart(2, '0');
+      const m = String(riga.getMinutes()).padStart(2, '0');
+      const s = String(riga.getSeconds()).padStart(2, '0');
+      document.getElementById('liveClock').textContent = `${h}:${m}:${s}`;
+    }
+
+    // Footer date
+    const d = new Date();
+    document.getElementById('footerDate').textContent = d.toLocaleDateString('en-GB', { year: 'numeric', month: 'long' });
+
+    updateClock();
+    setInterval(updateClock, 1000);
+  </script>
+</body>
+</html>
